@@ -9,13 +9,20 @@
 
   <script type="text/babel">
     const reactRoot = document.getElementById("root");
-
+    let counter = 0;
+    function countUp() {
+      counter += 1;
+      reRender();
+    }
+    function reRender() {
+      ReactDOM.render(<Container />, reactRoot);
+    }
     const Container = () => (
       <div>
-        <h3>Total Clicks: 0</h3>
-        <button>Click</button>
+        <h3>Total Clicks: {counter}</h3>
+        <button onClick={countUp}>Click</button>
       </div>
     );
-    ReactDOM.render(<Container />, reactRoot);
+    reRender();
   </script>
 </html>
