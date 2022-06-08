@@ -3,113 +3,42 @@
   <body>
     <div id="root"></div>
   </body>
-  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
     const reactRoot = document.getElementById("root");
 
-    function MinutesToHours() {
-      const [amount, setAmount] = React.useState(0);
-      const [flipped, setFlipped] = React.useState(false);
-      const onChange = (event) => {
-        setAmount(event.target.value);
-      };
-      const reset = () => setAmount(0);
-      const onFlip = () => {
-        reset();
-        setFlipped((current) => !current);
-      };
+    function Btn({ banana, fontSize = 12 }) {
       return (
-        <div>
-          <div>
-            <label htmlFor="minutes">Minutes</label>
-            <input
-              value={flipped ? amount * 60 : amount}
-              id="minutes"
-              placeholder="Minutes"
-              type="number"
-              onChange={onChange}
-              disabled={flipped}
-            />
-            <h4>Seconds {amount * 60}</h4>
-          </div>
-          <div>
-            <label htmlFor="hours">Hours</label>
-            <input
-              value={flipped ? amount : Math.floor(amount / 60)}
-              id="hours"
-              placeholder="Hours"
-              type="number"
-              onChange={onChange}
-              disabled={!flipped}
-            />
-          </div>
-          <button onClick={reset}>Reset</button>
-          <button onClick={onFlip}>Flip</button>
-        </div>
+        <button
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            border: 0,
+            borderRadius: 10,
+            fontSize,
+          }}
+        >
+          {banana}
+        </button>
       );
     }
-
-    function KmToMiles() {
-      const [amount, setAmount] = React.useState("x");
-      const [flipped, setFlipped] = React.useState(false);
-      const reset = () => setAmount(0);
-      const onChange = () => {
-        setAmount(event.target.value);
-      };
-      const onFlip = () => {
-        reset();
-        setFlipped((current) => !current);
-      };
-
-      return (
-        <div>
-          <div>
-            <label htmlFor="inputKM">KM</label>
-            <input
-              value={flipped ? (amount * 1.62).toFixed(2) : amount}
-              id="inputKM"
-              placeholder="KM"
-              type="number"
-              onChange={onChange}
-              disabled={flipped}
-            />
-          </div>
-          <div>
-            <label htmlFor="inputMile">Miles</label>
-            <input
-              value={flipped ? amount : (amount * 0.61).toFixed(2)}
-              id="inputMile"
-              placeholder="Miles"
-              type="number"
-              onChange={onChange}
-              disabled={!flipped}
-            />
-          </div>
-          <button onClick={reset}>Reset</button>
-          <button onClick={onFlip}>Flip</button>
-        </div>
-      );
-    }
-
+    const MemorizedBtn = React.memo(Btn);
+    MemorizedBtn.propTypes = {
+      banana: PropTypes.string.isRequired,
+      fontSize: PropTypes.number,
+    };
     function App() {
-      const [index, setIndex] = React.useState("x");
-      const onSelect = (event) => {
-        setIndex(event.target.value);
-      };
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => setValue("Revert Changes");
       return (
         <div>
-          <h1>Super Converter</h1>
-          <select value={index} onChange={onSelect}>
-            <option value="x">Select your units</option>
-            <option value="0">Minutes & Hours</option>
-            <option value="1">Kilometers & Miles</option>
-          </select>
-          <hr />
-          {index === "0" ? <MinutesToHours /> : null}
-          {index === "1" ? <KmToMiles /> : null}
+          <MemorizedBtn banana={value} fontSize={18} />
+          <MemorizedBtn banana={"Continue"} />
         </div>
       );
     }
